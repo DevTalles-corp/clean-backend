@@ -1,0 +1,19 @@
+{
+  "name": "clean-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "echo \"Error: no test specified\" && exit 1",
+    "dev": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typecheck": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "~5.9.3"
+  }
+}
