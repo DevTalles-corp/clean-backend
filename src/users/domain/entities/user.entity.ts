@@ -1,3 +1,9 @@
+// Entidad del dominio User: reúne los datos y las reglas que mantienen válido e inmutable cada usuario.
+// Centraliza esas garantías; sin ella, cada consumidor tendría que repetirlas y podrían circular datos de negocio inválidos.
+
+// El constructor privado dirige la creación a create() en TypeScript.
+// readonly protege en TypeScript; Object.freeze impide cambios en ejecución.
+
 import { ValidationError } from './../../../shared/domain/errors/domain.errors';
 
 export class User {
