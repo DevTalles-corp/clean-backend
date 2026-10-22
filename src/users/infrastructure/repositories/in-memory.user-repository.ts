@@ -1,6 +1,6 @@
-import { ConflictError } from '../../../shared/domain/errors/domain.errors';
-import { User } from '../../domain/entities/user.entity';
-import { UserRepository } from './../../domain/repositories/user.repository';
+import { ConflictError } from '../../../shared/domain/errors/domain.errors.ts';
+import { User } from '../../domain/entities/user.entity.ts';
+import type { UserRepository } from './../../domain/repositories/user.repository.ts';
 
 export class InMemoryUserRepository implements UserRepository {
   private readonly users = new Map<string, User>();
