@@ -5,15 +5,16 @@
   "scripts": {
     "start": "echo \"Error: no test specified\" && exit 1",
     "dev": "echo \"Error: no test specified\" && exit 1",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
     "node": ">=24"
   },
-  "dependencies": {},
   "devDependencies": {
     "@types/node": "^24.0.0",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "vitest": "^5.0.5"
   }
 }
