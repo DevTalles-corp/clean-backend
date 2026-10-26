@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { createExpressApp } from './shared/presentation/config/express.config.ts';
+import { createExpressApp } from './server/presentation/config/express.config.ts';
+import { createPublicRouter } from './server/presentation/routes/public.routes.ts';
 
 export function createApp() {
   // Todo: repositorios
@@ -10,7 +11,8 @@ export function createApp() {
 
   const router = Router();
 
-  // Todo: root
+  router.use('/', createPublicRouter());
+
   // Todo: /users
   // Todo: /payments
 
