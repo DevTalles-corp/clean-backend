@@ -2,8 +2,11 @@ import { json, Router } from 'express';
 import { requireJson } from '../../../server/presentation/http/require-json.ts';
 import { validateBody } from '../../../server/presentation/http/validate-body.ts';
 import { registerUserSchema } from '../schemas/register-user.schema.ts';
+import type { RegisterUserController } from '../controllers/register-user.controller.ts';
 
-export function createUsersRouter() {
+export function createUsersRouter(
+  registerUserController: RegisterUserController
+) {
   //todo: controlador
   const router = Router();
 
@@ -14,9 +17,10 @@ export function createUsersRouter() {
     validateBody(registerUserSchema),
 
     async (request, response) => {
-      response.json({
-        message: 'Hola Mundo!',
-      });
+      const body = request.body;
+
+      const user = await registerUserController.handle(body);
+      response.status(201).json(user);
     }
   );
 
