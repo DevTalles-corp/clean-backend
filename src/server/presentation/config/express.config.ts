@@ -1,5 +1,6 @@
 import express from 'express';
 import type { Router } from 'express';
+import { errorHandler } from '../http/error-handler.ts';
 
 export function createExpressApp(router: Router) {
   const app = express();
@@ -14,7 +15,7 @@ export function createExpressApp(router: Router) {
     });
   });
 
-  // Todo: Manejo de los errores
+  app.use(errorHandler);
 
   return app;
 }
