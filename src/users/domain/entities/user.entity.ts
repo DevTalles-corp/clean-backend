@@ -19,7 +19,7 @@ export class User {
 
   static create(name: string, email: string): User {
     const cleanName = name.trim();
-    const cleanEmail = email.trim().toLowerCase();
+    const cleanEmail = User.normalizeEmail(email);
 
     if (!cleanName) throw new ValidationError('El nombre es obligatorio.');
 
@@ -27,5 +27,9 @@ export class User {
       throw new ValidationError('El email debe de contener una @');
 
     return new User(cleanName, cleanEmail);
+  }
+
+  static normalizeEmail(email: string) {
+    return email.trim().toLowerCase();
   }
 }

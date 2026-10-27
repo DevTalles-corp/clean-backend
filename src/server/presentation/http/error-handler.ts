@@ -1,6 +1,7 @@
 import type { ErrorRequestHandler } from 'express';
 import {
   ConflictError,
+  NotFoundError,
   ValidationError,
 } from '../../../shared/domain/errors/domain.errors.ts';
 
@@ -20,6 +21,10 @@ export const errorHandler: ErrorRequestHandler = (
   if (error instanceof ValidationError) {
     response.status(400).json({ error: error.message });
     return;
+  }
+
+  if (error instanceof NotFoundError) {
+    response.status(404).json({ error: error.message });
   }
 
   if (error instanceof ConflictError) {

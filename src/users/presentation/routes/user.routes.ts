@@ -3,9 +3,11 @@ import { requireJson } from '../../../server/presentation/http/require-json.ts';
 import { validateBody } from '../../../server/presentation/http/validate-body.ts';
 import { registerUserSchema } from '../schemas/register-user.schema.ts';
 import type { RegisterUserController } from '../controllers/register-user.controller.ts';
+import type { FindUserByEmailController } from '../controllers/find-user-by-email.controller.ts';
 
 export function createUsersRouter(
-  registerUserController: RegisterUserController
+  registerUserController: RegisterUserController,
+  findUserByEmailController: FindUserByEmailController
 ) {
   //todo: controlador
   const router = Router();
@@ -23,6 +25,12 @@ export function createUsersRouter(
       response.status(201).json(user);
     }
   );
+
+  router.get('/:email', async (request, response) => {
+    const email = request.params.email;
+    const user = await findUserByEmailController.handle(email);
+    response.status(200).json(user);
+  });
 
   router.all('/', (_request, response) => {
     response
