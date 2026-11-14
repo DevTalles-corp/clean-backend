@@ -15,15 +15,29 @@ export interface CreateUserData {
   role?: UserRole;
 }
 
+// Datos para construir la entidad: el id lo genera quien la crea (p. ej. el caso de uso).
+export interface CreateUserProps extends CreateUserData {
+  id: string;
+}
+
+const uuidRegex =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+
 export class User {
-  // readonly id: string;
+  readonly id: string;
   readonly name: string;
   readonly email: string;
   readonly role: UserRole;
 
-  private constructor(user: { name: string; email: string; role: UserRole }) {
-    const { name, role, email } = user;
+  private constructor(user: {
+    id: string;
+    name: string;
+    email: string;
+    role: UserRole;
+  }) {
+    const { id, name, role, email } = user;
 
+    this.id = id;
     this.name = name;
     this.email = email;
     this.role = role;
@@ -31,12 +45,16 @@ export class User {
     Object.freeze(this);
   }
 
-  static create(input: CreateUserData): User {
-    const { name, email, role = 'user' } = input;
+  static create(input: CreateUserProps): User {
+    const { id, name, email, role = 'user' } = input;
 
+    const cleanId = id.trim().toLowerCase();
     const cleanName = name.trim();
     const cleanEmail = User.normalizeEmail(email);
 
+    if (!uuidRegex.test(cleanId)) {
+      throw new ValidationError('El id debe ser un UUID válido.');
+    }
     if (!cleanName) throw new ValidationError('El nombre es obligatorio.');
     if (!userRoles.includes(role)) {
       throw new ValidationError(`El role ${role} no es valido.`);
@@ -45,7 +63,12 @@ export class User {
     if (!cleanEmail.includes('@'))
       throw new ValidationError('El email debe de contener una @');
 
-    return new User({ name: cleanName, email: cleanEmail, role: role });
+    return new User({
+      id: cleanId,
+      name: cleanName,
+      email: cleanEmail,
+      role: role,
+    });
   }
 
   static normalizeEmail(email: string) {

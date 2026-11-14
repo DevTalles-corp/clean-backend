@@ -6,17 +6,20 @@ import {
   type CreateUserData,
 } from './../../domain/entities/user.entity.ts';
 import type { UserRepository } from '../../domain/repositories/user.repository.ts';
+import type { IdGenerator } from '../../../shared/domain/services/id-generator.ts';
 import { ConflictError } from '../../../shared/domain/errors/domain.errors.ts';
 
 export class RegisterUserUseCase {
   private readonly repository: UserRepository;
+  private readonly idGenerator: IdGenerator;
 
-  constructor(repository: UserRepository) {
+  constructor(repository: UserRepository, idGenerator: IdGenerator) {
     this.repository = repository;
+    this.idGenerator = idGenerator;
   }
 
   async execute(input: CreateUserData): Promise<User> {
-    const user = User.create(input);
+    const user = User.create({ ...input, id: this.idGenerator.generate() });
 
     if (await this.repository.findByEmail(user.email)) {
       throw new ConflictError('El email ya está registrado');

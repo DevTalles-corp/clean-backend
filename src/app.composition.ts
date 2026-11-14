@@ -6,14 +6,21 @@ import { RegisterUserUseCase } from './users/application/use-cases/register-user
 import { RegisterUserController } from './users/presentation/controllers/register-user.controller.ts';
 import { createUsersRouter } from './users/presentation/routes/user.routes.ts';
 import { FindUserByEmailUseCase } from './users/application/use-cases/find-user-by-email.use-case.ts';
+import { CryptoIdGenerator } from './shared/infrastructure/ids/crypto.id-generator.ts';
 import { FindUserByEmailController } from './users/presentation/controllers/find-user-by-email.controller.ts';
 
 export function createApp() {
   //! Repositorios
   const userRepository = new InMemoryUserRepository();
 
+  //! Servicios
+  const idGenerator = new CryptoIdGenerator();
+
   //! Casos de uso
-  const registerUserUseCase = new RegisterUserUseCase(userRepository);
+  const registerUserUseCase = new RegisterUserUseCase(
+    userRepository,
+    idGenerator
+  );
   const findUserByEmailUseCase = new FindUserByEmailUseCase(userRepository);
 
   //! Controladores
