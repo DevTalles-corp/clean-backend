@@ -5,6 +5,7 @@
 // readonly protege en TypeScript; Object.freeze impide cambios en ejecución.
 
 import { ValidationError } from './../../../shared/domain/errors/domain.errors.ts';
+import { isUuid } from '../../../shared/domain/validators/uuid.ts';
 
 const userRoles = ['user', 'admin', 'sales'] as const;
 export type UserRole = (typeof userRoles)[number];
@@ -19,9 +20,6 @@ export interface CreateUserData {
 export interface CreateUserProps extends CreateUserData {
   id: string;
 }
-
-const uuidRegex =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 
 export class User {
   readonly id: string;
@@ -52,7 +50,7 @@ export class User {
     const cleanName = name.trim();
     const cleanEmail = User.normalizeEmail(email);
 
-    if (!uuidRegex.test(cleanId)) {
+    if (!isUuid(cleanId)) {
       throw new ValidationError('El id debe ser un UUID válido.');
     }
     if (!cleanName) throw new ValidationError('El nombre es obligatorio.');
