@@ -1,7 +1,10 @@
 // Caso de uso de aplicación: coordina la creación del usuario, la comprobación de duplicados por email y el guardado.
 // Hace reutilizable el registro sin conocer HTTP ni el almacenamiento concreto; sin él, esa secuencia se repartiría entre adaptadores.
 
-import { User } from './../../domain/entities/user.entity.ts';
+import {
+  User,
+  type CreateUserData,
+} from './../../domain/entities/user.entity.ts';
 import type { UserRepository } from '../../domain/repositories/user.repository.ts';
 import { ConflictError } from '../../../shared/domain/errors/domain.errors.ts';
 
@@ -12,8 +15,8 @@ export class RegisterUserUseCase {
     this.repository = repository;
   }
 
-  async execute(name: string, email: string): Promise<User> {
-    const user = User.create(name, email);
+  async execute(input: CreateUserData): Promise<User> {
+    const user = User.create(input);
 
     if (await this.repository.findByEmail(user.email)) {
       throw new ConflictError('El email ya está registrado');

@@ -9,6 +9,9 @@ export class RegisterUserController {
   }
 
   async handle(input: RegisterUserInput) {
-    return this.registerUserUseCase.execute(input.name, input.email);
+    return this.registerUserUseCase.execute({
+      name: input.name,
+      email: input.email,
+    });
   }
 }
