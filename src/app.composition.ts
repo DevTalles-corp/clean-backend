@@ -17,11 +17,20 @@ import { CreatePaymentController } from './payments/presentation/controllers/cre
 import { FindPaymentByIdController } from './payments/presentation/controllers/find-payment-by-id.controller.ts';
 import { FindAllPaymentsController } from './payments/presentation/controllers/find-all-payments.controller.ts';
 import { createPaymentsRouter } from './payments/presentation/routes/payment.routes.ts';
+import { InMemoryProductRepository } from './products/infrastructure/repositories/in-memory.product-repository.ts';
+import { CreateProductUseCase } from './products/application/use-cases/create-product.use-case.ts';
+import { FindProductByIdUseCase } from './products/application/use-cases/find-product-by-id.use-case.ts';
+import { FindAllProductsUseCase } from './products/application/use-cases/find-all-products.use-case.ts';
+import { CreateProductController } from './products/presentation/controllers/create-product.controller.ts';
+import { FindProductByIdController } from './products/presentation/controllers/find-product-by-id.controller.ts';
+import { FindAllProductsController } from './products/presentation/controllers/find-all-products.controller.ts';
+import { createProductsRouter } from './products/presentation/routes/product.routes.ts';
 
 export function createApp() {
   //! Repositorios
   const userRepository = new InMemoryUserRepository();
   const paymentRepository = new InMemoryPaymentRepository();
+  const productRepository = new InMemoryProductRepository();
 
   //! Servicios
   const idGenerator = new CryptoIdGenerator();
@@ -42,6 +51,13 @@ export function createApp() {
   const findPaymentByIdUseCase = new FindPaymentByIdUseCase(paymentRepository);
   const findAllPaymentsUseCase = new FindAllPaymentsUseCase(paymentRepository);
 
+  const createProductUseCase = new CreateProductUseCase(
+    productRepository,
+    idGenerator
+  );
+  const findProductByIdUseCase = new FindProductByIdUseCase(productRepository);
+  const findAllProductsUseCase = new FindAllProductsUseCase(productRepository);
+
   //! Controladores
   const registerUserController = new RegisterUserController(
     registerUserUseCase
@@ -61,6 +77,16 @@ export function createApp() {
     findAllPaymentsUseCase
   );
 
+  const createProductController = new CreateProductController(
+    createProductUseCase
+  );
+  const findProductByIdController = new FindProductByIdController(
+    findProductByIdUseCase
+  );
+  const findAllProductsController = new FindAllProductsController(
+    findAllProductsUseCase
+  );
+
   // Rutas de la app
   const router = Router();
 
@@ -75,6 +101,14 @@ export function createApp() {
       createPaymentController,
       findPaymentByIdController,
       findAllPaymentsController
+    )
+  );
+  router.use(
+    '/products',
+    createProductsRouter(
+      createProductController,
+      findProductByIdController,
+      findAllProductsController
     )
   );
 
