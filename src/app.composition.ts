@@ -27,6 +27,8 @@ import { FindProductByIdController } from './products/presentation/controllers/f
 import { FindAllProductsController } from './products/presentation/controllers/find-all-products.controller.ts';
 import { createProductsRouter } from './products/presentation/routes/product.routes.ts';
 import { SqliteUserRepository } from './users/infrastructure/repositories/sqlite.user-repository.ts';
+import { SqlitePaymentRepository } from './payments/infrastructure/repositories/sqlite.payment-repository.ts';
+import { SqliteProductRepository } from './products/infrastructure/repositories/sqlite.product-repository.ts';
 
 // SQLite
 import Database from 'better-sqlite3';
@@ -41,8 +43,10 @@ export function createApp() {
   //! Repositorios
   // const userRepository = new InMemoryUserRepository();
   const userRepository = new SqliteUserRepository(db);
-  const paymentRepository = new InMemoryPaymentRepository();
-  const productRepository = new InMemoryProductRepository();
+  // const paymentRepository = new InMemoryPaymentRepository();
+  const paymentRepository = new SqlitePaymentRepository(db);
+  // const productRepository = new InMemoryProductRepository();
+  const productRepository = new SqliteProductRepository(db);
 
   //! Servicios
   const idGenerator = new CryptoIdGenerator();
