@@ -25,10 +25,19 @@ import { CreateProductController } from './products/presentation/controllers/cre
 import { FindProductByIdController } from './products/presentation/controllers/find-product-by-id.controller.ts';
 import { FindAllProductsController } from './products/presentation/controllers/find-all-products.controller.ts';
 import { createProductsRouter } from './products/presentation/routes/product.routes.ts';
+import { SqliteUserRepository } from './users/infrastructure/repositories/sqlite.user-repository.ts';
+
+// SQLite
+import Database from 'better-sqlite3';
 
 export function createApp() {
+  //! Database
+  const db = new Database('clean-database.db', {});
+  db.pragma('journal_mode = WAL');
+
   //! Repositorios
-  const userRepository = new InMemoryUserRepository();
+  // const userRepository = new InMemoryUserRepository();
+  const userRepository = new SqliteUserRepository(db);
   const paymentRepository = new InMemoryPaymentRepository();
   const productRepository = new InMemoryProductRepository();
 
