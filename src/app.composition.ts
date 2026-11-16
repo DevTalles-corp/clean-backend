@@ -1,3 +1,4 @@
+import { join } from 'node:path';
 import { Router } from 'express';
 import { createExpressApp } from './server/presentation/config/express.config.ts';
 import { createPublicRouter } from './server/presentation/routes/public.routes.ts';
@@ -32,7 +33,9 @@ import Database from 'better-sqlite3';
 
 export function createApp() {
   //! Database
-  const db = new Database('clean-database.db', {});
+  const db = new Database(
+    join(import.meta.dirname, '..', 'data', 'clean-database.db')
+  );
   db.pragma('journal_mode = WAL');
 
   //! Repositorios
